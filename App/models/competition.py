@@ -7,25 +7,19 @@ class Competition(db.Model):
     date = db.Column(db.DateTime, default= datetime.utcnow)
     # rank = db.Column(db.Integer)
     location = db.Column(db.String(120), nullable=False)
-
-    hosts = db.relationship("CompetitionHost", lazy=True, backref=db.backref("hosts"), cascade="all, delete-orphan")
-    participants = db.relationship("UserCompetition", lazy=True, backref=db.backref("users"), cascade="all, delete-orphan")
-
+    host = db.Column(db.String, db.ForeignKey('admin.username'), nullable=False)
+    participants = db.relationship('user', secondary="participation", overlaps='competetions', lazy=True)
 
     def __init__(self, name, location):
         self.name = name
         self.location = location
 
-
-    
     def get_json(self):
         return{
             'id': self.id,
             'name': self.name,
             'location': self.location
         }
-
-
 
     def toDict(self):
         res = {

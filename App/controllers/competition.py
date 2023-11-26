@@ -1,17 +1,20 @@
 from App.models import Competition,User, UserCompetition
 from App.database import db
 
-def create_competition(name, location):
-    newcomp = Competition(name = name, location = location)
-
-
+def create_Competition(name, creator_id):
+    Here= Competition.query.filter_by(name=name).first()
+    if Here:
+        print(f'{name} already exists!')
+        return Here
+    newComp = Competition(name=name, creator_id=creator_id)
     try:
-        db.session.add(newcomp)
-        db.session.commit()
+      db.session.add(newComp)
+      db.session.commit()
+      print(f'{name} created!')
     except Exception as e:
-        db.session.rollback()
-        return False
-    return True
+      db.session.rollback()
+      print(f'Something went wrong creating {name}')
+    return newComp
 
 def get_all_competitions():
     return Competition.query.all()
@@ -32,9 +35,7 @@ def get_competition_by_id(id):
 
 def add_results(user_id, comp_id, rank):
     Comp = Competition.query.get(comp_id)
-    user = User.query.get(user_id)
-        
-        
+    user = User.query.get(user_id)     
             
     if user and Comp:
         compParticipant = UserCompetition(user_id = user.id, comp_id = Comp.id, rank=rank)

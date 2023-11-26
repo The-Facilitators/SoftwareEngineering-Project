@@ -1,15 +1,20 @@
 from App.models import User, Competition, UserCompetition
 from App.database import db
 
-def create_user(username, password):
-    newuser = User(username=username, password=password)
+def create_Student(username, password):
+    Here = User.query.filter_by(username=username).first()
+    if Here:
+        print(f'{username} already exists!')
+        return None
+    newUser = User(username=username, password=password)
     try:
-        db.session.add(newuser)
-        db.session.commit()
-        return True
+      db.session.add(newStudent)
+      db.session.commit()
+      print(f'New User: {username} created!')
     except Exception as e:
-        db.session.rollback()
-        return False
+      db.session.rollback()
+      print(f'Something went wrong creating {username}')
+    return newUser
 
 
 def get_user_by_username(username):

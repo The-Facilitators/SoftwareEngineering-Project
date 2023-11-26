@@ -1,11 +1,21 @@
 from App.models import Admin
 from App.database import db
 
-def create_admin(username, password):
-    newAdmin = Admin(username=username, password=password)
-    db.session.add(newAdmin)
-    db.session.commit()
-    return newAdmin
+def create_Admin(username, password, website):
+    Here = Admin.query.filter_by(username=username).first()
+    if Here:
+        print(f'{username} already exists!')
+        return Here  
+    newA = Admin(username=username, password=password, website=website)
+    try:
+      db.session.add(newA)
+      db.session.commit()
+      print(f'New Admin: {username} created!')
+    except Exception as e:
+      db.session.rollback()
+      print(f'Something went wrong creating {username}')
+    return newA  
+
 
 def get_admin_by_username(username):
     return Admin.query.filter_by(username=username).first()

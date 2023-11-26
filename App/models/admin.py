@@ -6,11 +6,13 @@ class Admin(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username =  db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String(120), nullable=False)
+    website = db.Column(db.String, nullable=True)
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, website):
         self.username = username
         self.set_password(password)
-
+        self.website = website
+        
     def get_json(self):
         return{
             'id': self.id,

@@ -8,7 +8,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(120), nullable=False)
     overall_rank = db.relationship("Ranking", uselist=False, backref='user', lazy=True)
 
-    competitions = db.relationship("UserCompetition", lazy=True, backref=db.backref("competitions"), cascade="all, delete-orphan")
+    competitions = db.relationship("Participation", lazy=True, backref=db.backref("competitions"), cascade="all, delete-orphan")
 
     def __init__(self, username, password):
         self.username = username
